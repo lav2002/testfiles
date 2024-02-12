@@ -37,7 +37,7 @@ def send_screenshot_to_php(screenshot_path, php_endpoint):
 if __name__ == "__main__":
     website_url = input("Enter the website URL: ")
     screenshot_output = "screenshot.png"
-    php_endpoint = "http://example.com/upload.php"  # Replace with your PHP file endpoint
+    php_endpoint = "https://twis.in/shop/dp/uplaod.php"  # Replace with your PHP file endpoint
 
     take_screenshot(website_url, screenshot_output)
     send_screenshot_to_php(screenshot_output, php_endpoint)
