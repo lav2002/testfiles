@@ -63,5 +63,5 @@ prompt_parts = [
 response = model.generate_content(prompt_parts)
 
 st.title("Google's Gemini Pro - Vision")
-st.image("image0.jpeg")
+
 st.write(response.text)
