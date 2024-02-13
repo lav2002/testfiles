@@ -1,43 +1,67 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import time
+ 
+import streamlit as st
 import requests
+from pathlib import Path
+import google.generativeai as genai
 
-def take_screenshot(url, output_file):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+genai.configure(api_key="AIzaSyAtvEb6PVk_rGe0j6egUlWlRH_nX1I4u1Q")
 
-    # Set up the Chrome webdriver
-    driver = webdriver.Chrome(options=chrome_options)
+generation_config = {
+  "temperature": 0.4,
+  "top_p": 1,
+  "top_k": 32,
+  "max_output_tokens": 4096,
+}
 
-    try:
-        # Navigate to the given URL
-        driver.get(url)
-        
-        # Wait for some time to let the page load completely
-        time.sleep(5)
+safety_settings = [
+  {
+    "category": "HARM_CATEGORY_HARASSMENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_HATE_SPEECH",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+]
 
-        # Take a screenshot of the entire webpage
-        driver.save_screenshot(output_file)
+model = genai.GenerativeModel(model_name="gemini-pro-vision",
+                              generation_config=generation_config,
+                              safety_settings=safety_settings)
 
-    finally:
-        # Close the webdriver
-        driver.quit()
+response = requests.get("https://fleastore.in/gem/img.png")
+response.raise_for_status()
 
-def send_screenshot_to_php(screenshot_path, php_endpoint):
-    # Prepare files for POST request
-    files = {'screenshot': open(screenshot_path, 'rb')}
+with open("image0.jpeg", "wb") as f:
+    f.write(response.content)
 
-    # Make a POST request to the PHP file
-    response = requests.post(php_endpoint, files=files)
+if not (img := Path("image0.jpeg")).exists():
+  raise FileNotFoundError(f"Could not find image: {img}")
 
-    # Print the response from the server
-    print(response.text)
+image_parts = [
+  {
+    "mime_type": "image/jpeg",
+    "data": Path("image0.jpeg").read_bytes()
+  },
+]
 
-if __name__ == "__main__":
-    website_url = input("Enter the website URL: ")
-    screenshot_output = "screenshot.png"
-    php_endpoint = "https://twis.in/shop/dp/uplaod.php"  # Replace with your PHP file endpoint
+predefined_prompt = "read image and Detect all possible Dark pattern"
+prompt_parts = [
+  {
+    "text": predefined_prompt,
+  },
+  image_parts[0],
+]
 
-    take_screenshot(website_url, screenshot_output)
-    send_screenshot_to_php(screenshot_output, php_endpoint)
+response = model.generate_content(prompt_parts)
+
+st.title("Google's Gemini Pro - Vision")
+st.image("image0.jpeg")
+st.write(response.text)
