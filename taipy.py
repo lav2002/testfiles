@@ -52,7 +52,7 @@ image_parts = [
   },
 ]
 
-predefined_prompt = "read image and Detect all possible Dark pattern"
+predefined_prompt = "Read image and Detect Dark patterns in the image and if you find no dark pattern then just say there is no dark pattern"
 prompt_parts = [
   {
     "text": predefined_prompt,
@@ -62,6 +62,5 @@ prompt_parts = [
 
 response = model.generate_content(prompt_parts)
 
-st.title("Google's Gemini Pro - Vision")
 
 st.write(response.text)
