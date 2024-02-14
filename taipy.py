@@ -36,19 +36,19 @@ model = genai.GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=generation_config,
                               safety_settings=safety_settings)
 
-response = requests.get("https://fleastore.in/gem/img.png")
+response = requests.get("https://lumosteam.s3.ap-south-1.amazonaws.com/images/second_image.png")
 response.raise_for_status()
 
-with open("img.png", "wb") as f:
+with open("second_image.png", "wb") as f:
     f.write(response.content)
 
-if not (img := Path("img.png")).exists():
+if not (img := Path("second_image.png")).exists():
   raise FileNotFoundError(f"Could not find image: {img}")
 
 image_parts = [
   {
     "mime_type": "image/png",
-    "data": Path("img.png").read_bytes()
+    "data": Path("second_image.png").read_bytes()
   },
 ]
 
