@@ -36,7 +36,7 @@ model = genai.GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=generation_config,
                               safety_settings=safety_settings)
 
-response = requests.get("https://lumosteam.s3.ap-south-1.amazonaws.com/images/second_image.png")
+response = requests.get("https://twis.in/shop/apis/images/second_image.png")
 response.raise_for_status()
 
 with open("second_image.png", "wb") as f:
