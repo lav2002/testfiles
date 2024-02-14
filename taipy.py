@@ -52,7 +52,7 @@ image_parts = [
   },
 ]
 
-predefined_prompt = "Read image and Detect Dark patterns in the image and if you find no dark pattern then just say there is no dark pattern"
+predefined_prompt = "Read image and Detect Dark patterns in the image and if you find no dark pattern then tell there is no dark pattern but try to find dark pattern in image"
 prompt_parts = [
   {
     "text": predefined_prompt,
