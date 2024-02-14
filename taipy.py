@@ -39,16 +39,16 @@ model = genai.GenerativeModel(model_name="gemini-pro-vision",
 response = requests.get("https://fleastore.in/gem/img.png")
 response.raise_for_status()
 
-with open("image0.jpeg", "wb") as f:
+with open("img.png", "wb") as f:
     f.write(response.content)
 
-if not (img := Path("image0.jpeg")).exists():
+if not (img := Path("img.png")).exists():
   raise FileNotFoundError(f"Could not find image: {img}")
 
 image_parts = [
   {
-    "mime_type": "image/jpeg",
-    "data": Path("image0.jpeg").read_bytes()
+    "mime_type": "image/png",
+    "data": Path("img.png").read_bytes()
   },
 ]
 
